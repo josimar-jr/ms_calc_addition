@@ -3,4 +3,5 @@ Rails.application.routes.draw do
 
   get '/', action: :show, controller: 'healthcheck'
   get '/healthcheck', action: :show, controller: 'healthcheck'
+  get '/sum/:par1/:par2', action: :sum, controller: 'sum'
 end
