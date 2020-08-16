@@ -1,22 +1,22 @@
-FROM ruby:2.7.1-slim
-RUN apt-get update -qq && apt-get install -y gcc libxml2 libxslt1.1 nodejs
+FROM ruby:2.7.1-alpine
 
-RUN mkdir /ms-sum
-WORKDIR /ms-sum
+# Minimal requirements to run a Rails app
+RUN apk add --no-cache --update build-base \
+                                linux-headers \
+                                git \
+                                nodejs \
+                                sqlite-dev \
+                                tzdata
 
-RUN gem install pkg-config -v "~> 1.1"
-RUN gem install nokogiri -- --use-system-libraries
+ENV APP_PATH /ms-sum
 
-COPY Gemfile /ms-sum/Gemfile
-COPY Gemfile.lock /ms-sum/Gemfile.lock
-RUN bundle install
-COPY . /ms-sum
+# Different layer for gems installation
+WORKDIR $APP_PATH
+ADD Gemfile $APP_PATH
+ADD Gemfile.lock $APP_PATH
+RUN bundle install --jobs `expr $(cat /proc/cpuinfo | grep -c "cpu cores") - 1` --retry 3
 
-# Add a script to be executed every time the container starts.
-COPY entrypoint.sh /usr/bin/
-RUN chmod +x /usr/bin/entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
+# Copy the application into the container
+COPY . $APP_PATH
 EXPOSE 3000
-
-# Start the main process.
-CMD ["rails", "server", "-b", "0.0.0.0"]
+CMD /bin/sh -c "rm -f $APP_PATH/tmp/pids/server.pid && /usr/local/bundle/bin/rails server -b 0.0.0.0"
