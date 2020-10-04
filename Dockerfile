@@ -3,6 +3,7 @@ FROM ruby:2.7.1-alpine
 # Minimal requirements to run a Rails app
 RUN apk add --no-cache --update build-base \
                                 linux-headers \
+                                vim \
                                 git \
                                 nodejs \
                                 sqlite-dev \
@@ -18,5 +19,11 @@ RUN bundle install --jobs `expr $(cat /proc/cpuinfo | grep -c "cpu cores") - 1` 
 
 # Copy the application into the container
 COPY . $APP_PATH
+
+ENV RAILS_ENV production
+
 EXPOSE 3000
+
+RUN EDITOR="vim --wait" /usr/local/bundle/bin/rails credentials:edit
+
 CMD /bin/sh -c "rm -f $APP_PATH/tmp/pids/server.pid && /usr/local/bundle/bin/rails server -b 0.0.0.0"
