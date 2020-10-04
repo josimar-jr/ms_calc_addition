@@ -1,6 +1,10 @@
 require 'test_helper'
 
 class SumControllerTest < ActionDispatch::IntegrationTest
+  test "route accepts decimal numbers" do
+    assert_recognizes({ controller: 'sum', action: ':sum', value1: '1.0', value2: '1.0' }, '/sum/1.0/1.0/')
+  end
+
   test "1 + 14 = 15" do
     get '/sum/1/14', xhr: true
 

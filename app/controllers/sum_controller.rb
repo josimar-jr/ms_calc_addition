@@ -5,9 +5,8 @@ class SumController < ApplicationController
   end
 
   def sum
-    puts "param2 #{params[:par2].class} param #{params}"
-    first = params[:par1].to_f
-    second = params[:par2].to_f
+    first = params[:value1].to_f
+    second = params[:value2].to_f
 
     result = @sum_service.sum first, second
     render json: {"result" => result}, status: :ok
