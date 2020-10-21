@@ -1,24 +1,14 @@
-# README
+# Calculadora em micro-servi√ßo - SOMA
+Aplica√ßo√ iniciada com rails como API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+* Ruby version: 2.7
 
-Things you may want to cover:
+* Configura√ß√£o:
+```
+PORT # 3000
+RAILS_ENV=production # outras op√√es `development` | `test`
+SECRET_KEY_BASE= # exigido  para ambientes `production`
+RAILS_LOG_TO_STDOUT=true
+```
 
-* Ruby version
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
